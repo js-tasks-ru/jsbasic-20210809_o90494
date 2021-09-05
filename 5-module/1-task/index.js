@@ -1,3 +1,9 @@
+let btns = document.getElementsByClassName('hide-self-button');
+
 function hideSelf() {
-  // ваш код...
+  for(let btn of btns) {
+    btn.addEventListener('click', event => {
+      event.target.setAttribute('hidden', true);    
+   })
+  }  
 }
