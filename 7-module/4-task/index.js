@@ -7,9 +7,9 @@ export default class StepSlider {
     this.render();
 
     this.addEventListeners();
-
     this.setValue(value);      
   }
+
   render() {
     this.elem = createElement(`
       <div class="slider">
@@ -21,9 +21,9 @@ export default class StepSlider {
           ${'<span></span>'.repeat(this.steps)}
         </div>
       </div>
-    `)
-    
+    `);
   }
+
   setValue(value) {
     this.value = value;
 
@@ -34,7 +34,7 @@ export default class StepSlider {
 
     this.sub('value').innerHTML = value;
 
-    if(this.sub('step-active')) {
+    if (this.sub('step-active')) {
       this.sub('step-active').classList.remove('slider__step-active');
     }
 
@@ -43,22 +43,25 @@ export default class StepSlider {
 
   addEventListeners() {
     this.sub('thumb').ondragstart = () => false;
+
     this.sub('thumb').onpointerdown = this.onPointerDown;
+
     this.elem.onclick = this.onClick;
   }
+
   onClick = event => {
     let newLeft = (event.clientX - this.elem.getBoundingClientRect().left) / this.elem.offsetWidth;
 
     this.setValue(Math.round(this.segments * newLeft));
 
-
     this.elem.dispatchEvent(
-      new CustomEvent ('slider-change', {
+      new CustomEvent('slider-change', {
         detail: this.value,
         bubbles: true
       })
     );
   }
+
   onPointerDown = event => {
     event.preventDefault();
 
@@ -67,6 +70,7 @@ export default class StepSlider {
     document.addEventListener('pointermove', this.onPointerMove);
     document.addEventListener('pointerup', this.onPointerUp);
   }
+
   onPointerMove = event => {
     event.preventDefault();
 
@@ -75,20 +79,25 @@ export default class StepSlider {
     this.sub('thumb').style.left = `${newLeft * 100}%`;
     this.sub('progress').style.width = `${newLeft * 100}%`;
 
+    // Show the nearest value
+    // First half of step is 1, et
+    // |-------|-------|-------|-------|
+    // | 1 /   2   /   3   /   4   / 5 |
     this.value = Math.round(this.segments * newLeft);
     this.sub('value').innerHTML = this.value;
 
     if (this.sub('step-active')) {
       this.sub('step-active').classList.remove('slider__step-active');
-    }   
+    }
+
     this.sub('steps').children[this.value].classList.add('slider__step-active');
-    console.log(this.sub('step-active'));
   };
+
   calcLeftByEvent(event) {
     let newLeft = (event.clientX - this.elem.getBoundingClientRect().left) / this.elem.offsetWidth;
 
-    if (newLeft < 0) {newLeft = 0;}
-    if (newLeft > 1) {newLeft = 1;}
+    if (newLeft < 0) { newLeft = 0; }
+    if (newLeft > 1) { newLeft = 1; }
 
     return newLeft;
   }
@@ -97,21 +106,23 @@ export default class StepSlider {
     document.removeEventListener('pointermove', this.onPointerMove);
     document.removeEventListener('pointerup', this.onPointerUp);
 
-    this.elem.classList.remove('slider_dregging');
+    this.elem.classList.remove('slider_dragging');
 
+    // stick to the final value
     this.sub('thumb').style.left = `${(this.value / this.segments) * 100}%`;
     this.sub('progress').style.width = `${(this.value / this.segments) * 100}%`;
 
     this.elem.dispatchEvent(
-      new CustomEvent ('slider-change', {
+      new CustomEvent('slider-change', {
         detail: this.value,
         bubbles: true
       })
     );
-  }
+  };
 
   sub(ref) {
     return this.elem.querySelector(`.slider__${ref}`);
   }
+
 }
   
