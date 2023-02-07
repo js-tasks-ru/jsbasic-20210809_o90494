@@ -4,3 +4,4 @@ export default function(html) {
   div.innerHTML = html;
   return div.firstElementChild;
 };
+

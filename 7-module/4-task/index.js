@@ -7,8 +7,7 @@ export default class StepSlider {
     this.render();
 
     this.addEventListeners();
-
-    this.setValue(value);
+    this.setValue(value);      
   }
 
   render() {
@@ -126,3 +125,4 @@ export default class StepSlider {
   }
 
 }
+  
