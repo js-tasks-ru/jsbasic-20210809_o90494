@@ -24,10 +24,11 @@ export default class Modal {
   }
   setTitle = (title) => {
     const modalTitle = this.elem.querySelector('.modal__title');
-    modalTitle.append(title);
+    modalTitle.textContent = title;
   }
   setBody = (node) => {
     const modalBody = this.elem.querySelector('.modal__body');
+    modalBody.innerHTML = '';
     modalBody.append(node);
   }
   close = () =>{    
